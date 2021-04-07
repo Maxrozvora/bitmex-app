@@ -14,19 +14,27 @@
               <input
                 class="form-control"
                 type="number"
-                min="1"
+                step="1"
                 v-model="orderQty"
               />
             </td>
           </tr>
           <tr>
             <td>
-              <button class="btn btn-primary w-100" @click="submit('Buy')">
+              <button
+                class="btn btn-primary w-100"
+                @click="submit('Buy')"
+                :disabled="availableQty"
+              >
                 Buy
               </button>
             </td>
             <td>
-              <button class="btn btn-success w-100" @click="submit('Sell')">
+              <button
+                class="btn btn-success w-100"
+                @click="submit('Sell')"
+                :disabled="availableQty"
+              >
                 Sell
               </button>
             </td>
@@ -45,8 +53,16 @@ export default {
   data: () => ({
     orderQty: 1,
   }),
+  watch: {
+    orderQty(val) {
+      if (!val) this.orderQty = 1;
+    },
+  },
   computed: {
     ...mapState(["symbol"]),
+    availableQty() {
+      return !Number(this.orderQty);
+    },
   },
   methods: {
     submit(type) {
