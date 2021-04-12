@@ -56,6 +56,7 @@ export default {
   data: () => ({
     list: [],
     loading: true,
+    localSymbol: "",
   }),
   created() {
     this.loading = true;
@@ -73,10 +74,11 @@ export default {
       });
   },
   mounted() {
-    // this.currentSymbol = this.symbol;
+    this.localSymbol = this.symbol;
     this.socket.addEventListener("message", (res) => {
       const { data, action } = res.data;
       if (data && action === "insert") {
+        console.log("data quotes", data);
         const newRows = [...data, ...this.list];
         this.list = newRows.splice(0, 99);
       }
@@ -94,9 +96,10 @@ export default {
   },
 
   beforeDestroy() {
+    console.log("this.symbol", this.symbol);
     if (this.socket.readyState === WebSocket.OPEN)
       this.socket.send(
-        `{"op": "unsubscribe", "args": "tradeBin1m:${this.this.symbol}"}`
+        `{"op": "unsubscribe", "args": "tradeBin1m:${this.localSymbol}"}`
       );
   },
 };

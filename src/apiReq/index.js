@@ -1,5 +1,3 @@
-import config from "../config";
-
 const axios = require("axios");
 const crypto = require("crypto");
 
@@ -12,16 +10,16 @@ export default function APIRequest(method = "POST", url, data = "") {
       Accept: "application/json",
       "X-Requested-With": "XMLHttpRequest",
       "api-expires": expiresDate,
-      "api-key": config.apiKey,
+      "api-key": process.env.VUE_APP_apiKey,
       "api-signature": crypto
-        .createHmac("sha256", config.apiSecret)
+        .createHmac("sha256", process.env.VUE_APP_apiSecret)
         .update(method + path + expiresDate + postBody)
         .digest("hex"),
     },
     requestOptions = {
       headers: headers,
       method: method,
-      url: config.apiUrl + url,
+      url: process.env.VUE_APP_apiUrl + url,
       data: postBody,
     };
 

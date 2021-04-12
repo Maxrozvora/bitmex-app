@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import config from "@/config";
 import { mapMutations } from "vuex";
 export default {
   name: "TradePairs",
+  props: ["socket"],
   data: () => ({
     pairs: [],
   }),
@@ -50,20 +50,21 @@ export default {
     this.fetch();
   },
   beforeMount() {
-    const socket = new WebSocket(config.socketUrl);
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(`{"op": "subscribe", "args": "instrument"}`);
+    // const socket = new WebSocket(process.env.VUE_APP_socketUrl);
+    const message = '{"op": "subscribe", "args": "instrument"}';
+    if (this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(message);
     } else {
-      socket.addEventListener(
+      this.socket.addEventListener(
         "open",
         () => {
-          socket.send(`{"op": "subscribe", "args": "instrument"}`);
+          this.socket.send(message);
         },
         { once: true }
       );
     }
 
-    socket.addEventListener("message", (res) => {
+    this.socket.addEventListener("message", (res) => {
       const { data } = JSON.parse(res.data);
       if (data)
         data.forEach((item) => {

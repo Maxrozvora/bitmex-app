@@ -4,13 +4,12 @@ import router from "./router";
 import store from "./store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import config from "./config";
 import modificators from "./modificators";
 
 Vue.config.productionTip = false;
 
 Vue.prototype.$http = axios.create({
-  baseURL: config.apiUrl,
+  baseURL: process.env.VUE_APP_apiUrl,
 });
 
 Vue.use(modificators);
