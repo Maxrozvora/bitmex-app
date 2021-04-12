@@ -31,7 +31,7 @@
         </tbody>
         <tbody v-else>
           <tr v-for="(item, i) in list" :key="i">
-            <td>{{ new Date(item.timestamp) | moment }}</td>
+            <td>{{ new Date(item.timestamp) | date }}</td>
             <td>{{ item.open }}</td>
             <td>{{ item.high }}</td>
             <td>{{ item.low }}</td>
@@ -46,7 +46,6 @@
 
 <script>
 import { mapState } from "vuex";
-import moment from "moment";
 export default {
   name: "QuotesList",
   props: ["socket"],
@@ -57,13 +56,7 @@ export default {
   data: () => ({
     list: [],
     loading: true,
-    currentSymbol: "",
   }),
-  filters: {
-    moment: function (date) {
-      return moment(date).format("DD.MM.YYYY HH:mm:ss");
-    },
-  },
   created() {
     this.loading = true;
     this.$http
@@ -80,7 +73,7 @@ export default {
       });
   },
   mounted() {
-    this.currentSymbol = this.symbol;
+    // this.currentSymbol = this.symbol;
     this.socket.addEventListener("message", (res) => {
       const { data, action } = res.data;
       if (data && action === "insert") {
@@ -103,7 +96,7 @@ export default {
   beforeDestroy() {
     if (this.socket.readyState === WebSocket.OPEN)
       this.socket.send(
-        `{"op": "unsubscribe", "args": "tradeBin1m:${this.currentSymbol}"}`
+        `{"op": "unsubscribe", "args": "tradeBin1m:${this.this.symbol}"}`
       );
   },
 };
