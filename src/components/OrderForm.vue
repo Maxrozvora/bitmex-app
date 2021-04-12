@@ -61,7 +61,7 @@ export default {
   computed: {
     ...mapState(["symbol"]),
     availableQty() {
-      return !Number(this.orderQty);
+      return !(Number(this.orderQty) > 0);
     },
   },
   methods: {
