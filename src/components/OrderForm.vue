@@ -53,15 +53,10 @@ export default {
   data: () => ({
     orderQty: 1,
   }),
-  watch: {
-    orderQty(val) {
-      if (!val) this.orderQty = 1;
-    },
-  },
   computed: {
     ...mapState(["symbol"]),
     availableQty() {
-      return !(Number(this.orderQty) > 0);
+      return !(this.orderQty > 0);
     },
   },
   methods: {

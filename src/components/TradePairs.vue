@@ -52,19 +52,19 @@ export default {
   beforeMount() {
     // const socket = new WebSocket(process.env.VUE_APP_socketUrl);
     const message = '{"op": "subscribe", "args": "instrument"}';
-    if (this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(message);
+    if (this.$socket.readyState === WebSocket.OPEN) {
+      this.$socket.send(message);
     } else {
-      this.socket.addEventListener(
+      this.$socket.addEventListener(
         "open",
         () => {
-          this.socket.send(message);
+          this.$socket.send(message);
         },
         { once: true }
       );
     }
 
-    this.socket.addEventListener("message", (res) => {
+    this.$socket.addEventListener("message", (res) => {
       const { data } = JSON.parse(res.data);
       if (data)
         data.forEach((item) => {

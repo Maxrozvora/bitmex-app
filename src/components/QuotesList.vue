@@ -75,7 +75,7 @@ export default {
   },
   mounted() {
     this.localSymbol = this.symbol;
-    this.socket.addEventListener("message", (res) => {
+    this.$socket.addEventListener("message", (res) => {
       const { data, action } = res.data;
       if (data && action === "insert") {
         console.log("data quotes", data);
@@ -84,21 +84,20 @@ export default {
       }
     });
     const message = `{"op": "subscribe", "args": "tradeBin1m:${this.symbol}"}`;
-    if (this.socket.readyState === WebSocket.OPEN) this.socket.send(message);
+    if (this.$socket.readyState === WebSocket.OPEN) this.$socket.send(message);
     else
-      this.socket.addEventListener(
+      this.$socket.addEventListener(
         "open",
         () => {
-          this.socket.send(message);
+          this.$socket.send(message);
         },
         { once: true }
       );
   },
 
   beforeDestroy() {
-    console.log("this.symbol", this.symbol);
-    if (this.socket.readyState === WebSocket.OPEN)
-      this.socket.send(
+    if (this.$socket.readyState === WebSocket.OPEN)
+      this.$socket.send(
         `{"op": "unsubscribe", "args": "tradeBin1m:${this.localSymbol}"}`
       );
   },

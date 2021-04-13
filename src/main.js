@@ -12,6 +12,8 @@ Vue.prototype.$http = axios.create({
   baseURL: process.env.VUE_APP_apiUrl,
 });
 
+Vue.prototype.$socket = new WebSocket(process.env.VUE_APP_socketUrl);
+
 Vue.use(modificators);
 
 new Vue({

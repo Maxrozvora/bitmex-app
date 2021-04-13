@@ -2,10 +2,10 @@
   <section class="container">
     <div class="row">
       <div class="col-md-3">
-        <trade-pairs :socket="socket" />
+        <trade-pairs />
       </div>
       <div class="col-md-6">
-        <quotes-list :key="'quotes' + symbol" :socket="socket" v-if="symbol" />
+        <quotes-list :key="'quotes' + symbol" v-if="symbol" />
       </div>
       <div class="col-md-3">
         <order-form />
@@ -28,9 +28,6 @@ import { mapState } from "vuex";
 export default {
   name: "Home",
   components: { TradePairs, QuotesList, OrdersHistory, OrderForm },
-  data: () => ({
-    socket: new WebSocket(process.env.VUE_APP_socketUrl),
-  }),
   computed: {
     ...mapState(["symbol"]),
   },
